@@ -1,12 +1,13 @@
 from django.db import models
 from django.utils.translation import ugettext as _
+from django.utils.html import format_html
 
 class APIUser(models.Model):
     """docstring for User"""
     id = models.IntegerField(primary_key=True)
     login = models.CharField(_('Login Username'), unique=True, max_length=200)
     node_id = models.CharField(_('Node Id'), max_length=200)
-    avatar_url = models.ImageField(_('Avatar'), null=True, blank=True)
+    avatar_url = models.CharField(_('Avatar'), max_length=200, null=True, blank=True)
     gravatar_id = models.CharField(_('Gravatar_id'), max_length=255, null=True, blank=True)
     url = models.CharField(_('Url'), max_length=200, null=True, blank=True)
     html_url = models.CharField(_('HTML Url'), max_length=200, null=True, blank=True)
@@ -34,4 +35,13 @@ class APIUser(models.Model):
     following = models.IntegerField(_('Following'), null=True, blank=True)
     created_at = models.DateTimeField(_('Create Date'))
     updated_at = models.DateTimeField(_('Update Date'))
+    added_on = models.DateField(_('Added on Date'), auto_now_add=True)
 
+    def __str__(self):
+        return self.login
+
+    def avatar(self):
+        return format_html(
+            '<img src="{}" style="width: 75px;">',
+            self.avatar_url,
+        )

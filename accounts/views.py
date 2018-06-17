@@ -1,4 +1,3 @@
-from django.contrib.sites.shortcuts import get_current_site
 from django.shortcuts import render
 from django.utils.dateparse import parse_datetime
 import requests
@@ -7,7 +6,8 @@ from rest_framework.permissions import (
     AllowAny
     )
 from rest_framework.response import Response
-from rest_framework.status import (HTTP_200_OK,
+from rest_framework.status import (
+    HTTP_200_OK,
     HTTP_404_NOT_FOUND
     )
 from rest_framework.views import APIView
@@ -28,8 +28,8 @@ class UserSearchAPIView(APIView):
         if response.status_code == 200:
             response_data = response.json()
             response_data.update({
-                'created_at':parse_datetime(response_data['created_at']),
-                'updated_at':parse_datetime(response_data['updated_at']),
+                'created_at': parse_datetime(response_data['created_at']),
+                'updated_at': parse_datetime(response_data['updated_at']),
                 })
             serializer = APIUserSerializer(response_data)
             try:
