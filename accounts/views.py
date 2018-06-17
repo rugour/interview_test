@@ -1,5 +1,6 @@
 from django.shortcuts import render
 from django.utils.dateparse import parse_datetime
+from django.utils import timezone
 import requests
 from rest_framework.generics import UpdateAPIView
 from rest_framework.permissions import (
@@ -12,7 +13,7 @@ from rest_framework.status import (
     )
 from rest_framework.views import APIView
 
-from .models import APIUser
+from .models import APIUser, SearchCall
 from .serializers import UserSearchSerializer, APIUserSerializer
 
 
@@ -22,6 +23,12 @@ class UserSearchAPIView(APIView):
     permission_classes = (AllowAny,)
 
     def post(self, request, *args, **kwargs):
+        try:
+            c = SearchCall.objects.get(called_on=timezone.now().date())
+        except:
+            c = SearchCall(called_on=timezone.now().date())
+        c.counter += 1
+        c.save()
         username = request.data['username']
         url = "https://api.github.com/users/"+username
         response = requests.get(url)

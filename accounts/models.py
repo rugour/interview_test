@@ -45,3 +45,13 @@ class APIUser(models.Model):
             '<img src="{}" style="width: 75px;">',
             self.avatar_url,
         )
+
+class SearchCall(models.Model):
+    called_on = models.DateField(_('Search Call Date'))
+    counter = models.IntegerField(_('Call Made on this day'), default=0)
+
+    def __str__(self):
+        return str(self.called_on)
+
+    class Meta:
+        verbose_name = 'Report'
